@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../assets/reset.css" rel="stylesheet" />
+    <link href="../assets/style.css" rel="stylesheet" />
+    <link href="../assets/favicon.png" rel="icon" />
+    <title>Nessus's Blood – S167 Legends</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #a8aab0, #ec6464);
+            font-family: 'Georgia', serif;
+            padding: 2rem;
+            color: #3e2d4a;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #9a1b1b;
+            font-family: 'Trebuchet MS', sans-serif;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        section {
+            max-width: 700px;
+            margin: 2rem auto;
+            background-color: #efd4cd;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        figure h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #512da8;
+            border-bottom: 2px solid #ca3f3f;
+            padding-bottom: 0.5rem;
+        }
+
+        figure p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 2rem;
+            display: block;
+            font-size: 1rem;
+            text-decoration: none;
+            color: #8b2c2c;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Nessus's Blood</h1>
+
+    <section id="blocks"></section>
+
+    <a href="../index.html" class="back-link">← Back to Map</a>
+
+    <script>
+        async function loadNessus() {
+            const res = await fetch("https://api.are.na/v2/channels/legend-drbfk5aatxo/contents?per=100");
+            const data = await res.json();
+            const blocks = data.contents;
+            const container = document.getElementById("blocks");
+
+            const nessus = blocks.find(block =>
+                block.title &&
+                block.title.toLowerCase().includes("nessus") &&
+                block.title.toLowerCase().includes("blood")
+            );
+
+            if (!nessus) {
+                container.innerHTML = "<p>Could not find the legend of Nessus's Blood in the Are.na channel.</p>";
+                return;
+            }
+
+            const fig = document.createElement("figure");
+            fig.classList.add("active");
+            fig.innerHTML = `
+        <p>${nessus.content_html || nessus.description_html || "No content available."}</p>
+      `;
+            container.appendChild(fig);
+        }
+
+        loadNessus();
+    </script>
+</body>
+
+</html>

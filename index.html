@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="assets/reset.css" rel="stylesheet">
+	<link href="assets/style.css" rel="stylesheet">
+	<link href="assets/favicon.png" rel="icon">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+
+<body>
+	<h1>S167 Legends</h1>
+	<h2>Click a Blue Marker to Learn About a Legend From That Region</h2>
+	<div id="legend-map"></div>
+	<br>
+	<br>
+	<section id="blocks"></section>
+
+	<h4>Click the Red Marker to Learn More About the Project</h4>
+	<script>
+		const map = L.map('legend-map', {
+			center: [20, 0],
+			zoom: 2,
+			minZoom: 2,
+			maxZoom: 5,
+			worldCopyJump: true,
+			maxBounds: [
+				[-85, -180],
+				[85, 180]
+			],
+			maxBoundsViscosity: 1.0
+		});
+
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; OpenStreetMap contributors'
+		}).addTo(map);
+
+		const coordinates = {
+			"The Story of Sinuhe": [20.0444, 31.2357],
+			"The Odyssey": [38.3646, 20.7205],
+			"Nessus’s Blood": [38.3746, 20.7255],
+			"The Legend of the Peach Blossom Spring": [28.9025, 111.4766],
+			"The Legend of Aphrodite's Love Relationship": [34.7756, 32.4245],
+			"The Legend of the White Snake": [30.2364, 120.1503],
+			"The Story of Jingwei": [39.1, 117.2],
+			"Abu Fanoos": [25.6872, 32.6396]
+		};
+
+		const slugify = str =>
+			str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+		async function loadArenaBlocks() {
+			const res = await fetch("https://api.are.na/v2/channels/legend-drbfk5aatxo/contents?per=100");
+			const data = await res.json();
+			const blocks = data.contents;
+			const container = document.getElementById("blocks");
+
+			const blockMap = {};
+			blocks.forEach(block => {
+				if (block.title) blockMap[block.title] = block;
+			});
+
+			Object.entries(coordinates).forEach(([title, coords]) => {
+				const block = blockMap[title];
+				if (!block) return;
+
+				const marker = L.circleMarker(coords, {
+					radius: 5,
+					fillColor: "#0077cc",
+					color: "#003366",
+					weight: 1,
+					opacity: 1,
+					fillOpacity: 0.8
+				})
+					.addTo(map)
+					.bindTooltip(title, { permanent: false, direction: "top" });
+
+				marker.on('click', () => {
+					if (block.source && block.source.url) {
+						window.open(block.source.url, "_blank");
+					} else {
+						const slug = slugify(title);
+						window.location.href = `legend-pages/${slug}.html`;
+					}
+				});
+			});
+		}
+
+		loadArenaBlocks();
+
+		const newHavenCoords = [41.3083, -72.9279];
+		const newHavenMarker = L.circleMarker(newHavenCoords, {
+			radius: 5,
+			fillColor: "#c72c48",
+			color: "#8c1a2c",
+			weight: 1,
+			opacity: 1,
+			fillOpacity: 0.9
+		})
+			.addTo(map)
+			.bindTooltip("New Haven, CT", { sticky: true, direction: "top" });
+
+		newHavenMarker.on('click', () => {
+			window.location.href = 'legend-pages/new-haven.html';
+		});
+
+		Object.values(coordinates).forEach(originCoords => {
+			L.polyline([originCoords, newHavenCoords], {
+				color: '#235789',
+				weight: 1.5,
+				opacity: 1
+			}).addTo(map);
+		});
+	</script>
+
+
+</body>
+
+</html>
