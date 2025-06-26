@@ -98,7 +98,9 @@
             const blocks = data.contents;
             const container = document.getElementById("blocks");
 
-            const odyssey = blocks.find(block => block.title && block.title.toLowerCase() === "the odyssey");
+            const odyssey = blocks.find(block =>
+                block.title && block.title.toLowerCase().includes("odyssey")
+            );
 
             if (!odyssey) {
                 container.innerHTML = "<p>Could not find The Odyssey in the Are.na channel.</p>";

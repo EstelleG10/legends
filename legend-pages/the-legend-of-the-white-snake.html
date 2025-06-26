@@ -8,46 +8,39 @@
     <link href="assets/style.css" rel="stylesheet" />
     <link href="assets/favicon.png" rel="icon" />
     <title>The Legend of the White Snake – S167 Legends</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Zhi+Mang+Xing&display=swap"
+        rel="stylesheet">
+
     <style>
         body {
-            background: linear-gradient(to bottom right, #eaf4f4, #d3e2df);
-            font-family: "Georgia", serif;
+            background: linear-gradient(to bottom, #f0f9f7, #dceeee);
+            font-family: 'Noto Serif SC', serif;
             padding: 2rem;
-            color: #2e3d3b;
+            color: #2a3c3b;
+            letter-spacing: 0.3px;
         }
 
         h1 {
             text-align: center;
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #4a6a6c;
-            font-family: "KaiTi", "Georgia", serif;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+            font-size: 3.2rem;
+            margin-bottom: 1.2rem;
+            color: #2f5c58;
+            font-family: 'Zhi Mang Xing', cursive;
+            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
         }
 
-        section {
-            max-width: 700px;
+        main {
+            max-width: 750px;
             margin: 2rem auto;
-            background-color: #fefefe;
-            padding: 2rem;
-            border-radius: 14px;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        figure h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #3a5a5e;
-            border-bottom: 2px solid #a9c8c5;
-            padding-bottom: 0.5rem;
+            animation: fadeIn 1.2s ease-in-out;
         }
 
         figure p {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            word-wrap: break-word;
-            overflow-wrap: anywhere;
+            font-size: 1.25rem;
+            line-height: 2;
+            color: #2e3d3b;
             white-space: pre-wrap;
         }
 
@@ -55,9 +48,9 @@
             text-align: center;
             margin-top: 2rem;
             display: block;
-            font-size: 1rem;
+            font-size: 1.1rem;
             text-decoration: none;
-            color: #4a6a6c;
+            color: #2f5c58;
             font-weight: bold;
         }
 
@@ -82,7 +75,7 @@
 <body>
     <h1>The Legend of the White Snake</h1>
 
-    <section id="blocks"></section>
+    <main id="blocks"></main>
 
     <a href="../index.html" class="back-link">← Back to Map</a>
 
@@ -106,7 +99,6 @@
             const fig = document.createElement("figure");
             fig.classList.add("active");
             fig.innerHTML = `
-
         <p>${whiteSnake.content_html || whiteSnake.description_html || "No content available."}</p>
       `;
             container.appendChild(fig);

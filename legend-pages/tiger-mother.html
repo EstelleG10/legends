@@ -7,50 +7,50 @@
     <link href="assets/reset.css" rel="stylesheet" />
     <link href="assets/style.css" rel="stylesheet" />
     <link href="assets/favicon.png" rel="icon" />
-    <title>The Legend of the Peach Blossom Spring – S167 Legends</title>
-
-    <!-- Fonts for ethereal vibe -->
-    <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Serif+SC:wght@400;700&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+    <title>The “Tiger Mother” – S167 Legends</title>
     <style>
         body {
-            background: linear-gradient(to bottom right, #fff1f7, #d8f5e4);
-            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(to bottom right, #fbe9e7, #f8cfcf);
+            font-family: 'Cormorant Garamond', serif;
             padding: 2rem;
-            color: #3a2b2f;
-            letter-spacing: 0.3px;
+            color: #4b2c2c;
+            min-height: 100vh;
         }
 
         h1 {
             text-align: center;
-            font-size: 3.2rem;
+            font-size: 3.4rem;
             margin-bottom: 1.5rem;
-            color: #c84b66;
-            font-family: 'Zhi Mang Xing', cursive;
-            text-shadow: 0 2px 5px rgba(255, 255, 255, 0.4);
+            color: #7b2f2f;
+            font-weight: 600;
+            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.15);
+            letter-spacing: 0.4px;
         }
 
         main {
-            max-width: 750px;
+            max-width: 720px;
             margin: 0 auto;
-            animation: fadeIn 1.2s ease-in-out;
+            animation: fadeIn 1s ease-in-out;
         }
 
         figure p {
-            font-size: 1.25rem;
+            font-size: 1.4rem;
             line-height: 2;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
             white-space: pre-wrap;
+            margin: 1.5rem 0;
         }
 
         .back-link {
             text-align: center;
-            margin-top: 2rem;
             display: block;
-            font-size: 1.1rem;
+            font-size: 1rem;
             text-decoration: none;
-            color: #c84b66;
+            color: #7b2f2f;
             font-weight: bold;
+            margin-top: 3rem;
         }
 
         .back-link:hover {
@@ -72,38 +72,37 @@
 </head>
 
 <body>
-    <h1>The Legend of the Peach Blossom Spring</h1>
+    <h1>The “Tiger Mother”</h1>
 
     <main id="blocks"></main>
 
     <a href="../index.html" class="back-link">← Back to Map</a>
 
     <script>
-        async function loadPeachLegend() {
+        async function loadTigerMother() {
             const res = await fetch("https://api.are.na/v2/channels/legend-drbfk5aatxo/contents?per=100");
             const data = await res.json();
             const blocks = data.contents;
             const container = document.getElementById("blocks");
 
-            const peach = blocks.find(block =>
-                block.title &&
-                block.title.toLowerCase().includes("peach blossom")
+            const tiger = blocks.find(block =>
+                block.title && block.title.toLowerCase().includes("tiger mother")
             );
 
-            if (!peach) {
-                container.innerHTML = "<p>Could not find The Legend of the Peach Blossom Spring in the Are.na channel.</p>";
+            if (!tiger) {
+                container.innerHTML = "<p>Could not find The “Tiger Mother” in the Are.na channel.</p>";
                 return;
             }
 
             const fig = document.createElement("figure");
             fig.classList.add("active");
             fig.innerHTML = `
-        <p>${peach.content_html || peach.description_html || "No content available."}</p>
+        <p>${tiger.content_html || tiger.description_html || "No content available."}</p>
       `;
             container.appendChild(fig);
         }
 
-        loadPeachLegend();
+        loadTigerMother();
     </script>
 </body>
 

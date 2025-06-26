@@ -9,17 +9,141 @@
 	<link href="assets/favicon.png" rel="icon">
 	<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 	<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=EB+Garamond&display=swap"
+		rel="stylesheet">
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		#legend-map {
+			width: 100%;
+			height: 500px;
+		}
+
+		#project-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: #aad3df;
+			z-index: 1000;
+			display: none;
+			justify-content: center;
+			align-items: center;
+			padding: 2rem;
+		}
+
+
+		#overlay-content {
+			position: relative;
+			width: 90%;
+			max-width: 1000px;
+			background: rgba(255, 255, 255, 0);
+
+			padding: 3rem;
+			border-radius: 16px;
+			overflow-y: auto;
+			max-height: 90vh;
+		}
+
+
+		#close-overlay {
+			position: absolute;
+			top: 1rem;
+			right: 1rem;
+			background: #c72c48;
+			color: white;
+			border: none;
+			border-radius: 50%;
+			width: 2rem;
+			height: 2rem;
+			font-weight: bold;
+			font-family: monospace;
+			/* helps center the X */
+			font-size: 1.2rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0;
+			cursor: pointer;
+		}
+
+		#close-overlay:hover {
+			background: #8c1a2c;
+		}
+
+
+		.explore-link {
+			display: inline-block;
+			margin-top: 1.5rem;
+			background-color: #0055aa;
+			color: white;
+			padding: 0.4rem 1.0rem;
+			border-radius: 6px;
+			font-weight: bold;
+			text-decoration: none;
+		}
+
+		.explore-link:hover {
+			background-color: #c9d4df;
+			color: #003f7f;
+		}
+
+		h1,
+		h2 {
+			font-family: 'Cinzel', serif;
+			color: #0055aa;
+		}
+
+		h1 {
+			font-size: 4 rem;
+		}
+
+		p {
+			font-family: 'EB Garamond', serif;
+			color: #333;
+			line-height: 1.7;
+			font-size: 1.19rem;
+		}
+	</style>
 </head>
 
 <body>
 	<h1>S167 Legends</h1>
 	<h2>Click a Blue Marker to Learn About a Legend From That Region</h2>
 	<div id="legend-map"></div>
-	<br>
-	<br>
 	<section id="blocks"></section>
-
 	<h4>Click the Red Marker to Learn More About the Project</h4>
+
+	<!-- Overlay Modal -->
+	<div id="project-overlay">
+		<div id="overlay-content">
+			<button id="close-overlay">X</button>
+			<h1>The Legends Project</h1>
+			<p><strong>A collection of stories that celebrates a primary orality and confronts the writing monopoly of
+					histories.</strong></p>
+			<h2>About</h2>
+			<p>This project curates and maps a diverse set of legends, myths, and oral histories from around the world.
+				Each narrative was selected, researched, and contextualized by students in Yale’s S167 class.</p>
+			<p>These legends are living archives, passed down through generations by voice and memory. This digital
+				platform brings them together to honor oral traditions and demonstrate how they can be shared widely.
+				Although each of us told a different story, we now carry the knowledge of them all. We have discovered
+				new legends that we can continue to pass on. The map reminds us that a legend's origin is not its
+				endpoint. Through this class and project, stories from around the world were gathered, connected, and
+				shared in one classroom. This website was created to reflect that journey.</p>
+			<h2>How It Works</h2>
+			<p>Each legend is pinned to a location on our interactive map, based on a place chosen by the student who
+				shared it. Students created individual blocks on Are.na to present their selected stories. This website
+				pulls directly from those blocks to showcase each legend. Clicking a marker reveals a summary and any
+				additional details the student chose to share with us — and now with you.</p>
+			<h2>Explore</h2>
+			<a class="explore-link" href="#" id="close-overlay-link">View the Map →</a>
+		</div>
+	</div>
+
 	<script>
 		const map = L.map('legend-map', {
 			center: [20, 0],
@@ -46,7 +170,10 @@
 			"The Legend of Aphrodite's Love Relationship": [34.7756, 32.4245],
 			"The Legend of the White Snake": [30.2364, 120.1503],
 			"The Story of Jingwei": [39.1, 117.2],
-			"Abu Fanoos": [25.6872, 32.6396]
+			"Abu Fanoos": [25.6872, 32.6396],
+			"La Llorona": [19.4326, -99.1332],
+
+
 		};
 
 		const slugify = str =>
@@ -104,7 +231,7 @@
 			.bindTooltip("New Haven, CT", { sticky: true, direction: "top" });
 
 		newHavenMarker.on('click', () => {
-			window.location.href = 'legend-pages/new-haven.html';
+			document.getElementById('project-overlay').style.display = 'flex';
 		});
 
 		Object.values(coordinates).forEach(originCoords => {
@@ -114,9 +241,36 @@
 				opacity: 1
 			}).addTo(map);
 		});
+
+		// Show overlay on page load
+		// Show overlay only on first visit and then never again 
+		window.addEventListener('load', () => {
+			if (!sessionStorage.getItem('seenOverlay')) {
+				document.getElementById('project-overlay').style.display = 'flex';
+				sessionStorage.setItem('seenOverlay', 'true');
+				setTimeout(() => {
+					map.invalidateSize();
+				}, 400);
+			}
+		});
+
+
+		// Close overlay and fix map layout
+		document.getElementById('close-overlay').addEventListener('click', () => {
+			document.getElementById('project-overlay').style.display = 'none';
+			setTimeout(() => {
+				map.invalidateSize();
+			}, 300);
+		});
+		document.getElementById('close-overlay-link').addEventListener('click', (e) => {
+			e.preventDefault(); // Prevent default anchor behavior
+			document.getElementById('project-overlay').style.display = 'none';
+			setTimeout(() => {
+				map.invalidateSize(); // Recalculate map size
+			}, 300);
+		});
+
 	</script>
-
-
 </body>
 
 </html>
